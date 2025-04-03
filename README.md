@@ -1,7 +1,7 @@
 
-# 📚 SQL_Library – Library Management System (Bachelor’s Thesis)
+# 📚 SQL_Library – Library Management System 
 
-This project is a relational database system designed to manage a library, developed as part of a bachelor's thesis.
+This project is a relational database system designed to manage a library.
 
 ## 📌 Description
 
