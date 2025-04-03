@@ -1,0 +1,188 @@
+CREATE TABLE CLIENTUL (
+    CNP VARCHAR(13) PRIMARY KEY,
+    nume VARCHAR(30) NOT NULL,
+    prenume VARCHAR(30) NOT NULL,
+    email VARCHAR(100) NOT NULL
+);
+ALTER TABLE CLIENTUL ADD CONSTRAINT chk_CNP_length CHECK (LENGTH(CNP) = 13);
+
+INSERT INTO CLIENTUL VALUES ('1234567890123', 'Popescu', 'Ion', 'ion.popescu@email.com');
+INSERT INTO CLIENTUL VALUES ('2345678901234', 'Ionescu', 'Ana', 'ana.ionescu@email.com');
+INSERT INTO CLIENTUL VALUES ('3456789012345', 'Marinescu', 'George', 'george.marinescu@email.com');
+INSERT INTO CLIENTUL VALUES ('4567890123456', 'Dumitru', 'Elena', 'elena.dumitru@email.com');
+INSERT INTO CLIENTUL VALUES ('5678901234567', 'Vasilescu', 'Mihai', 'mihai.vasilescu@email.com');
+
+
+CREATE TABLE IMPRUMUT (
+    id_imprumut VARCHAR2(5) PRIMARY KEY,
+    id_carte VARCHAR2(5) NOT NULL,
+    data_imprumut DATE NOT NULL,
+    data_retur DATE NOT NULL
+);
+ALTER TABLE IMPRUMUT ADD CONSTRAINT chk_id_imprumut_length CHECK (LENGTH(id_imprumut) = 4);
+ALTER TABLE IMPRUMUT ADD CONSTRAINT chk_id_carte_length CHECK (LENGTH(id_carte) = 4);
+
+INSERT INTO IMPRUMUT  VALUES ('0001', '0001', TO_DATE('2023-01-15', 'YYYY-MM-DD'), TO_DATE('2023-02-14', 'YYYY-MM-DD'));
+INSERT INTO IMPRUMUT  VALUES ('0002', '0002', TO_DATE('2023-02-01', 'YYYY-MM-DD'), TO_DATE('2023-03-01', 'YYYY-MM-DD'));
+INSERT INTO IMPRUMUT  VALUES ('0003', '0003', TO_DATE('2023-03-10', 'YYYY-MM-DD'), TO_DATE('2023-04-09', 'YYYY-MM-DD'));
+INSERT INTO IMPRUMUT  VALUES ('0004', '0004', TO_DATE('2023-04-05', 'YYYY-MM-DD'), TO_DATE('2023-05-05', 'YYYY-MM-DD'));
+INSERT INTO IMPRUMUT  VALUES ('0005', '0005', TO_DATE('2023-05-15', 'YYYY-MM-DD'), TO_DATE('2023-06-14', 'YYYY-MM-DD'));
+
+CREATE TABLE CARTE (
+    id_carte VARCHAR2(5) PRIMARY KEY,
+    nume VARCHAR2(30) NOT NULL,
+    id_autor VARCHAR2(5) NOT NULL,
+    id_categorie VARCHAR2(5)NOT NULL,
+    FOREIGN KEY (id_autor) REFERENCES AUTOR(id_autor),
+    FOREIGN KEY (id_categorie) REFERENCES CATEGORIE(id_categorie)
+);
+ALTER TABLE CARTE ADD CONSTRAINT chk_id_carte1_length CHECK (LENGTH(id_carte) = 4);
+
+INSERT INTO CARTE VALUES ('0001', 'Cartea Intai', '0001', '0001');
+INSERT INTO CARTE VALUES ('0002', 'Cartea a Doua', '0002', '0002');
+INSERT INTO CARTE VALUES ('0003', 'Istoria Artei', '0003', '0003');
+INSERT INTO CARTE VALUES ('0004', 'Lumea Stiintei', '0004', '0004');
+INSERT INTO CARTE VALUES ('0005', 'Enciclopedia Naturii', '0005', '0005');
+
+CREATE TABLE EDITURA (
+    id_editura VARCHAR2(5) PRIMARY KEY,
+    nume VARCHAR2(30) NOT NULL,
+    adresa VARCHAR2(100) NOT NULL,
+    telefon VARCHAR2(10) NOT NULL
+);
+ALTER TABLE EDITURA ADD CONSTRAINT chk_id_editura1_length CHECK (LENGTH(id_editura) = 4);
+ALTER TABLE EDITURA ADD CONSTRAINT chk_telefon_editura_length CHECK (LENGTH(telefon) = 10);
+
+INSERT INTO EDITURA VALUES ('0001', 'Editura Litera', 'Strada Libertatii nr. 10, Bucuresti', '0759760004');
+INSERT INTO EDITURA VALUES ('0002', 'Editura Humanitas', 'Bdul Magheru nr. 20, Bucuresti', '0759769804');
+INSERT INTO EDITURA VALUES ('0003', 'Editura Polirom', 'Strada Pacii nr. 5, Iasi', '0729769804');
+INSERT INTO EDITURA VALUES ('0004', 'Editura Nemira', 'Sos. Mihai Bravu nr. 32, Bucuresti', '0729269804');
+INSERT INTO EDITURA VALUES ('0005', 'Editura ART', 'Strada Luminii nr. 42, Cluj-Napoca', '0729269874');
+
+
+CREATE TABLE CATEGORIE (
+    id_categorie VARCHAR2(5) PRIMARY KEY,
+    nume VARCHAR2(30) NOT NULL,
+    nr_raft VARCHAR2(3) NOT NULL
+);
+ALTER TABLE CATEGORIE ADD CONSTRAINT chk_id_categorie_length CHECK (LENGTH(id_categorie) = 4);
+
+INSERT INTO CATEGORIE VALUES ('0001', 'Literatura', '001');
+INSERT INTO CATEGORIE VALUES ('0002', 'Stiinte', '002');
+INSERT INTO CATEGORIE VALUES ('0003', 'Arta', '003');
+INSERT INTO CATEGORIE VALUES ('0004', 'Istorie', '004');
+INSERT INTO CATEGORIE VALUES ('0005', 'Tehnologie', '005');
+
+
+CREATE TABLE AUTOR (
+    id_autor VARCHAR2(5) PRIMARY KEY,
+    nume VARCHAR2(30) NOT NULL,
+    prenume VARCHAR2(30) NOT NULL
+);
+ALTER TABLE AUTOR ADD CONSTRAINT chk_id_autor_length CHECK (LENGTH(id_autor) = 4);
+
+INSERT INTO AUTOR VALUES ('0001', 'Ionescu', 'Ioan');
+INSERT INTO AUTOR VALUES ('0002', 'Popescu', 'Maria');
+INSERT INTO AUTOR VALUES ('0003', 'Georgescu', 'George');
+INSERT INTO AUTOR VALUES ('0004', 'Dumitrescu', 'Ana');
+INSERT INTO AUTOR VALUES ('0005', 'Vasilescu', 'Vasile');
+
+
+CREATE TABLE PUBLICATIE (
+    id_carte VARCHAR2(5) NOT NULL,
+    id_editura VARCHAR2(5) NOT NULL,
+);
+ALTER TABLE AUTOR ADD CONSTRAINT pk_publicatie PRIMARY KEY (id_carte, id_editura);
+ALTER TABLE AUTOR ADD CONSTRAINT chk_id_autor_length FOREIGN KEY (id_carte) REFERENCES CARTE(id_carte);
+ALTER TABLE AUTOR ADD CONSTRAINT fk_publicatie_carte FOREIGN KEY (id_editura) REFERENCES EDITURA(id_editura);
+
+ALTER TABLE PUBLICATIE ADD CONSTRAINT chk_id_carte_length CHECK (LENGTH(id_carte) = 4);
+ALTER TABLE PUBLICATIE ADD CONSTRAINT chk_id_editura_length CHECK (LENGTH(id_editura) = 4);
+
+INSERT INTO PUBLICATIE VALUES ('0001', '0001');
+INSERT INTO PUBLICATIE VALUES ('0002', '0002');
+INSERT INTO PUBLICATIE VALUES ('0003', '0003');
+INSERT INTO PUBLICATIE VALUES ('0004', '0004');
+INSERT INTO PUBLICATIE VALUES ('0005', '0005');
+
+
+CREATE TABLE ANGAJAT (
+    CNP VARCHAR2(13) PRIMARY KEY,
+    nume VARCHAR2(30) NOT NULL,
+    prenume VARCHAR2(30) NOT NULL,
+    telefon VARCHAR2(10) NOT NULL,
+    adresa VARCHAR2(100) NOT NULL,
+    id_categorie VARCHAR2(5) NOT NULL,
+);
+ALTER TABLE AUTOR ADD CONSTRAINT fk_angajat_categorie FOREIGN KEY (id_categorie) REFERENCES CATEGORIE(id_categorie);
+
+INSERT INTO ANGAJAT VALUES ('1234567890123', 'Popescu', 'Ion', '0712345678', 'Strada Libertatii, Nr. 10, Bucuresti', '0001');
+INSERT INTO ANGAJAT VALUES ('2345678901234', 'Ionescu', 'Ana', '0723456789', 'Strada Revolutiei, Nr. 22, Cluj-Napoca', '0002');
+INSERT INTO ANGAJAT VALUES ('3456789012345', 'Marinescu', 'Mihai', '0734567890', 'Bdul Unirii, Nr. 8, Iasi', '0003');
+INSERT INTO ANGAJAT VALUES ('4567890123456', 'Dumitrescu', 'Elena', '0745678901', 'Aleea Rozelor, Nr. 3, Timisoara', '0004');
+INSERT INTO ANGAJAT VALUES ('5678901234567', 'Nistor', 'Dorin', '0756789012', 'Strada Pacii, Nr. 15, Constanta', '0005');
+
+SELECT * FROM CLIENTUL;
+SELECT * FROM IMPRUMUT;
+SELECT * FROM CARTE;
+SELECT * FROM EDITURA;
+SELECT * FROM CATEGORIE;
+SELECT * FROM AUTOR;
+SELECT * FROM PUBLICATIE;
+SELECT * FROM ANGAJAT;
+
+CREATE VIEW VizualizareCarti AS
+SELECT nume
+FROM CARTE;
+
+SELECT * FROM VizualizareCarti;
+
+CREATE VIEW VizualizareCartiEdituri AS
+SELECT c.nume AS Nume_Carte, e.nume AS Nume_Editura
+FROM CARTE c
+JOIN PUBLICATIE p ON c.id_carte = p.id_carte
+JOIN EDITURA e ON p.id_editura = e.id_editura;
+
+SELECT * FROM VizualizareCartiEdituri;
+
+SELECT * FROM EDITURA;
+
+CREATE OR REPLACE PROCEDURE AdaugaEditura(
+    p_id_editura IN EDITURA.id_editura%TYPE,
+    p_nume IN EDITURA.nume%TYPE,
+    p_adresa IN EDITURA.adresa%TYPE,
+    p_telefon IN EDITURA.telefon%TYPE)
+IS
+BEGIN
+    INSERT INTO EDITURA
+    VALUES (p_id_editura, p_nume, p_adresa, p_telefon);
+END;
+
+
+BEGIN
+    AdaugaEditura('0007', 'Noua Editura', 'Str Noua, Nr 10', '0123456789');
+END;
+
+
+SELECT * FROM EDITURA;
+
+
+
+
+CREATE OR REPLACE PROCEDURE afisare_interogari(
+    p_camp IN VARCHAR
+) AS
+BEGIN
+
+    DBMS_OUTPUT.PUT_LINE('Interogarea pentru tabela CATEGORIE, folosind câmpul ' || p_camp || ':');
+    SELECT p_camp FROM CATEGORIE;
+    DBMS_OUTPUT.PUT_LINE('Interogarea pentru tabela CARTE, folosind câmpul ' || p_camp || ':');
+    SELECT p_camp FROM CARTE;
+END;
+/
+BEGIN
+    afisare_interogari('nume'); 
+END;
+/
+
+ SELECT nume FROM CARTE;
